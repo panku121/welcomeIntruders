@@ -270,9 +270,6 @@
         `;
                     successMessage.style.display = "block";
                     form.reset();
-                    setTimeout(() => {
-                        redirectTomainSite()
-                    }, 0);
                 }
             } catch (error) {
                 loader.style.display = "none";
@@ -283,6 +280,9 @@
             // Hide success message after 5 seconds
             setTimeout(() => {
                 successMessage.style.display = "none";
+                setTimeout(() => {
+                        this.redirectTomainSite()
+                    }, 0);
             }, 7000);
         });
 
