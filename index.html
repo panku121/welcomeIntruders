@@ -270,6 +270,10 @@
         `;
                     successMessage.style.display = "block";
                     form.reset();
+                    // ✅ Redirect after success
+                    setTimeout(() => {
+                        redirectTomainSite();
+                    }, 7000);
                 }
             } catch (error) {
                 loader.style.display = "none";
@@ -286,9 +290,9 @@
             }, 7000);
         });
 
-        redirectTomainSite() {
-                window.location.href = 'https://panku121.github.io/welcomeIntruders';
-        }
+        function redirectTomainSite() {
+        window.location.href = 'https://panku121.github.io/welcomeIntruders/';
+         }
 
 
     </script>
