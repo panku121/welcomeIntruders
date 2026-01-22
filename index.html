@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Royal Intruders | Official Team Site</title>
+    <title>Royal Intruders | Welcome Form</title>
 
     <style>
         body {
@@ -270,6 +270,9 @@
         `;
                     successMessage.style.display = "block";
                     form.reset();
+                    setTimeout(() => {
+                        redirectTomainSite()
+                    }, 0);
                 }
             } catch (error) {
                 loader.style.display = "none";
@@ -282,6 +285,10 @@
                 successMessage.style.display = "none";
             }, 7000);
         });
+
+        redirectTomainSite() {
+                window.location.href = 'https://panku121.github.io/welcomeIntruders';
+        }
 
 
     </script>
