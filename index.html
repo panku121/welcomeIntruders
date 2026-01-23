@@ -4,116 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Royal Intruders | Welcome Form</title>
-
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #111827, #1f2933);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #fff;
-        }
-
-        .card {
-            background: #ffffff;
-            color: #000;
-            width: 380px;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            text-align: center;
-        }
-
-        .logo {
-            width: 120px;
-            margin-bottom: 15px;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #b91c1c;
-        }
-
-        label {
-            display: block;
-            text-align: left;
-            font-weight: 600;
-            margin: 10px 0 5px;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 14px;
-        }
-
-        .row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .row .field {
-            flex: 1;
-        }
-
-
-        button {
-            width: 100%;
-            margin-top: 18px;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: #b91c1c;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background: #991b1b;
-        }
-
-        /* Loader */
-        .loader {
-            display: none;
-            margin: 20px auto;
-            border: 6px solid #e5e7eb;
-            border-top: 6px solid #b91c1c;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .success-message {
-            display: none;
-            margin-top: 15px;
-            background: #ecfdf5;
-            color: #065f46;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -121,7 +12,8 @@
     <div class="card">
 
         <!-- Logo -->
-        <img src="https://panku121.github.io/welcomeIntruders/RoyalIntrudersNewLogo.png" alt="Royal Intruders Logo" class="logo">
+        <img src="https://panku121.github.io/welcomeIntruders/RoyalIntrudersNewLogo.png" alt="Royal Intruders Logo"
+            class="logo">
 
         <h2>Royal Intruders Player Form</h2>
 
@@ -192,11 +84,7 @@
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
         import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
 
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
             apiKey: "AIzaSyBd9xnnYBc0teWch8KinC8ku1noBkGPpm0",
             authDomain: "royalintruders.firebaseapp.com",
@@ -209,8 +97,6 @@
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-
-        console.log("app status", app)
 
         const db = getDatabase(app);
 
@@ -273,7 +159,7 @@
                     // ✅ Redirect after success
                     setTimeout(() => {
                         redirectTomainSite();
-                    }, 7000);
+                    }, 3000);
                 }
             } catch (error) {
                 loader.style.display = "none";
@@ -284,16 +170,10 @@
             // Hide success message after 5 seconds
             setTimeout(() => {
                 successMessage.style.display = "none";
-                setTimeout(() => {
-                        this.redirectTomainSite()
-                    }, 0);
             }, 7000);
         });
 
-        function redirectTomainSite() {
-        window.location.href = 'https://panku121.github.io/welcomeIntruders/';
-         }
-
+        function redirectTomainSite() { window.location.href = 'https://panku121.github.io/intrudersOfficialSite' }
 
     </script>
 
