@@ -70,6 +70,12 @@
             <label>T-Shirt Chest / Back Number</label>
             <input type="number" id="TeeNumber" required>
 
+            <label>Upload your photo</label>
+            <input type="file" id="playerPhoto" accept="image/*">
+            <div class="photo-preview-wrap" id="photoPreviewWrap">
+                <img id="playerPhotoPreview" class="photo-preview" src="" alt="Your photo">
+            </div>
+
             <button type="submit">Submit Details</button>
         </form>
 
@@ -82,29 +88,46 @@
     </div>
 
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyBd9xnnYBc0teWch8KinC8ku1noBkGPpm0",
-            authDomain: "royalintruders.firebaseapp.com",
-            projectId: "royalintruders",
-            storageBucket: "royalintruders.firebasestorage.app",
-            messagingSenderId: "417773145015",
-            appId: "1:417773145015:web:1d7edc6bd7e4318fbbb632",
-            measurementId: "G-GJ8GXG4BJW"
-        };
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { Client, Storage, ID, Permission, Role } from 'https://esm.sh/appwrite@14.0.1';
+        import { firebaseConfig } from './firebase-config.js';
+        import { appwriteConfig } from './appwrite-config.js';
 
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-
         const db = getDatabase(app);
+        
+        // Initialize Appwrite
+        const client = new Client();
+        client
+            .setEndpoint(appwriteConfig.endpoint)
+            .setProject(appwriteConfig.projectId);
+        const storage = new Storage(client);
 
         // 3. UI Elements
         const form = document.getElementById("playerForm");
         const loader = document.getElementById("loader");
         const successMessage = document.getElementById("successMessage");
+        const playerPhotoInput = document.getElementById("playerPhoto");
+        const photoPreviewWrap = document.getElementById("photoPreviewWrap");
+        const playerPhotoPreview = document.getElementById("playerPhotoPreview");
+
+        // Photo preview: show image when user selects a file (phone or laptop)
+        playerPhotoInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file && file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    playerPhotoPreview.src = e.target.result;
+                    photoPreviewWrap.classList.add("visible");
+                };
+                reader.readAsDataURL(file);
+            } else {
+                playerPhotoPreview.src = "";
+                photoPreviewWrap.classList.remove("visible");
+            }
+        });
 
         // 4. Form Submit Listener
         form.addEventListener("submit", async function (e) {
@@ -136,7 +159,21 @@
                     alert("This player (Name + DOB) is already registered!");
                     console.log("User already exists:", snapshot.val());
                 } else {
-                    // Save new entry
+                    // Upload photo to Appwrite Storage (if user selected one)
+                    let photoURL = null;
+                    const photoFile = playerPhotoInput.files[0];
+                    if (photoFile && photoFile.type.startsWith("image/")) {
+                        const promise = storage.createFile(
+                            appwriteConfig.bucketId, 
+                            ID.unique(), 
+                            photoFile,
+                            [Permission.read(Role.any())]
+                        );
+                        const response = await promise;
+                        photoURL = `https://cloud.appwrite.io/v1/storage/buckets/${appwriteConfig.bucketId}/files/${response.$id}/view?project=${appwriteConfig.projectId}`
+                    }
+
+                    // Save new entry (including photo URL in Realtime Database)
                     await set(userRef, {
                         playerName: name,
                         playerRole: playerRole,
@@ -145,6 +182,7 @@
                         tShirtNumber: TeeNumber,
                         sleeveLength: sleeveLength,
                         phoneNumber: mobileNumber,
+                        photoURL: photoURL,
                         timestamp: new Date().toISOString()
                     });
 
@@ -157,6 +195,8 @@
         `;
                     successMessage.style.display = "block";
                     form.reset();
+                    playerPhotoPreview.src = "";
+                    photoPreviewWrap.classList.remove("visible");
                     // ✅ Redirect after success
                     setTimeout(() => {
                         redirectTomainSite();
@@ -164,7 +204,7 @@
                 }
             } catch (error) {
                 loader.style.display = "none";
-                console.error("Firebase Error:", error);
+                console.error("Appwrite/Firebase Error:", error);
                 alert("Error saving data. Check console.");
             }
 
