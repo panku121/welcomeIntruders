@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Intruders | Welcome Form</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -70,7 +71,7 @@
             <label>T-Shirt Chest / Back Number</label>
             <input type="number" id="TeeNumber" required>
 
-            <label>Upload Player Photo</label>
+            <label>Upload Player Photo ( Upto 20MB )</label>
             <input type="file" id="playerPhoto" accept=".jpg,.jpeg,.png,.webp" required>
 
             <button type="submit">Submit Details</button>
@@ -116,7 +117,7 @@
             uploadPreset: "royalPlayerProfilePic"
         };
         const allowedImageTypes = ["image/jpeg", "image/png", "image/webp"];
-        const maxImageSizeInBytes = 2 * 1024 * 1024; // 2MB
+        const maxImageSizeInBytes = 20 * 1024 * 1024; // 20MB
 
         async function uploadToCloudinary(file, userId) {
             const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`;
@@ -175,7 +176,7 @@
                 }
 
                 if (photoFile.size > maxImageSizeInBytes) {
-                    throw new Error("Image size must be 2MB or less.");
+                    throw new Error("Image size must be 20MB or less.");
                 }
 
                 // Check if player already exists
